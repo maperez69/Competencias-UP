@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UP - Competencias Directivas (v10.0 AUDITADO)</title>
+    <title>UP - Competencias Directivas (v11.0 ACTUALIZADO)</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
@@ -32,55 +32,34 @@
         const { useState, useMemo, useEffect } = React;
         const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } = window.Recharts;
 
-        // Base de Datos AUDITADA - Sincronizada con Menti (10-feb-2026) y CVs
+        // Base de Datos ACTUALIZADA - Sesión 5 (17-feb-2026)
+        // Quizzes: [S1, S2, S3, S4(17-feb)]
+        // Asistencia: [S1, S2, S3, S4, S5(17-feb)]
         const rawData = [
-            { nombre: "Álvarez Justo Alberto", quizzes: [8034, 0, 0], asistencia: ['A','A','F','F'], carrera: "Administración y Finanzas", apodo: "Alberto", hobbie: "Carreras Coches", crack: "Negociar", altasPropia: ["Negociación", "Liderazgo", "Comunicación"], wingfinder: ["Analítico", "Disciplinado", "Liderazgo", "Objetivo"], bajas: ["Gestión del tiempo", "Manejo de estrés", "Delegación"], cv: { exp: "Practicante en Finanzas Corporativas", skills: "Modelado Financiero, Excel Avanzado, Análisis de datos", rol: "Finanzas/Análisis" }, valores: ["Autocontrol", "Lealtad", "Seguridad"], v: 8, k: 4, a: 3 },
-            
-            { nombre: "Arana López Emilio", quizzes: [5256, 0, 6326], asistencia: ['A','A','F','A'], carrera: "Contaduría", apodo: "Emilio", hobbie: "Padel", crack: "GOLF", altasPropia: ["Liderazgo", "Administración del tiempo", "Organización"], wingfinder: ["Sociable", "Paciente", "Relajado", "Independiente"], bajas: ["Gestión del tiempo", "Comunicación asertiva", "Orden"], cv: { exp: "Becario en área contable e IMSS (AYC)", skills: "Excel avanzado, CONTPAQI, SUA", rol: "Auditoría/Impuestos" }, valores: ["Divertirse", "Armonía", "Organización"], v: 3, k: 11, a: 1 },
-            
-            { nombre: "Castro Leo Axel Patricio", quizzes: [8964, 9975, 7997], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Axel", hobbie: "Series / GYM", crack: "Matemáticas Financieras", altasPropia: ["Liderazgo", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Directo", "Autónomo", "Reservado", "Independiente"], bajas: ["Inteligencia emocional", "Manejo del estrés", "Reuniones"], cv: { exp: "Becario LATINEX, Disney Campus", skills: "Análisis Financiero, Atención al cliente, Gestión del tiempo", rol: "Finanzas/Operaciones" }, valores: ["Autocontrol", "Respeto", "Perseverancia"], v: 5, k: 4, a: 6 },
-            
-            { nombre: "Cruzado García Emiliano", quizzes: [7995, 7113, 7954], asistencia: ['A','A','A','A'], carrera: "Contaduría", apodo: "Emiliano", hobbie: "Ejercicio Hyrox", crack: "Cacería", altasPropia: ["Manejo de estrés", "Liderazgo", "Trabajo en equipo"], wingfinder: ["Paciente", "Creatividad", "Relajado", "Pragmático"], bajas: ["Reuniones efectivas", "Negociación", "Planeación"], cv: { exp: "A&C Asesoría y Consultoría en Seguridad Social", skills: "Excel, CONTPAQI, SUA, Descarga XML", rol: "Contabilidad/Costos" }, valores: ["Divertirse", "Lealtad", "Puntualidad"], v: 6, k: 4, a: 5 },
-            
-            { nombre: "Duarte Villa María José", quizzes: [8363, 9432, 8497], asistencia: ['A','A','A','A'], carrera: "Inteligencia de Datos y Ciberseguridad", apodo: "MAJO", hobbie: "Cine / Tejer", crack: "Cocinando", altasPropia: ["Liderazgo", "Pensamiento Crítico", "Reuniones efectivas"], wingfinder: ["Modesta", "Autónoma", "Paciente", "Relajada"], bajas: ["Negociación", "Inteligencia emocional", "Gestión del cambio"], cv: { exp: "Tutora de Matemáticas, Coordinadora campaña social", skills: "Python, Análisis de Datos, Excel, R", rol: "Tecnología/Ciberseguridad" }, valores: ["Autocontrol", "Integridad", "Organización"], v: 5, k: 5, a: 5 },
-            
-            { nombre: "Gaytán Ruiz David", quizzes: [8106, 8074, 8703], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "David", hobbie: "Tenis", crack: "Finanzas", altasPropia: ["Inteligencia emocional", "Negociación", "Liderazgo"], wingfinder: ["Directo", "Autónomo", "Pragmático", "Independiente"], bajas: ["Gestión del cambio", "Administración del tiempo", "Manejo de estrés"], cv: { exp: "Secretario General Consejo Estudiantil Finanzas", skills: "Proactividad, Trabajo en equipo, Resolución problemas", rol: "Banca/Inversiones" }, valores: ["Liderazgo", "Perseverancia", "Integridad"], v: 5, k: 6, a: 4 },
-            
-            { nombre: "Gutiérrez Velázquez Roberto", quizzes: [6652, 4229, 4680], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Roberto", hobbie: "Tenis", crack: "Golf", altasPropia: ["Liderazgo", "Análisis Financiero", "Negociación"], wingfinder: ["Directo", "Paciente", "Pragmático", "Sociable"], bajas: ["Gestión del cambio", "Comunicación", "Empatía"], cv: { exp: "Administrador tiendas Samech, Certif. BMV", skills: "Gestión Financiera, Análisis Financiero, Control inventario", rol: "Administración/Finanzas" }, valores: ["Lealtad", "Congruencia", "Liderazgo"], v: 5, k: 5, a: 5 },
-            
-            { nombre: "Hernández Rodríguez Luis Felipe", quizzes: [8637, 9102, 10284], asistencia: ['F','A','A','A'], carrera: "Contaduría", apodo: "Felipe", hobbie: "Leer / GYM", crack: "Manejar", altasPropia: ["Disciplina", "Liderazgo", "Organización"], wingfinder: ["Reservado", "Diligente", "Relajado", "Intuitivo"], bajas: ["Negociación", "Inteligencia emocional", "Delegación"], cv: { exp: "Auxiliar Contable Amarantos/Campo Vivo", skills: "CONTPAQI, Descarga XML, Office 365", rol: "Contabilidad/Auditoría" }, valores: ["Autocontrol", "Respeto", "Comunicación"], v: 5, k: 1, a: 6 },
-            
-            { nombre: "López Bravo Ana Camila", quizzes: [0, 0, 6409], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Camila", hobbie: "GYM Pilates", crack: "Pilates", altasPropia: ["Empatía", "Colaboración", "Escucha activa"], wingfinder: ["Empatía", "Escucha activa", "Colaboración", "Soporte"], bajas: ["Manejo de estrés", "Inteligencia emocional", "Comunicación"], cv: { exp: "Emprendedora E-commerce, Creadora Contenido", skills: "Creatividad, Organización, Gestión Redes Sociales", rol: "Finanzas/Marketing" }, valores: ["Respeto", "Empatía", "Humildad"], v: 6, k: 4, a: 5 },
-            
-            { nombre: "López Iglesias Daniel", quizzes: [8579, 9042, 8022], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Daniel", hobbie: "GYM", crack: "Basket", altasPropia: ["Trabajo en equipo", "Liderazgo", "Inteligencia emocional"], wingfinder: ["Paciente", "Autónomo", "Soporte", "Atento"], bajas: ["Manejo del estrés", "Negociación", "Gestión del cambio"], cv: { exp: "Feria Innovación UP, MUN Mejor Delegado", skills: "Liderazgo, Habilidades comunicativas, Creatividad", rol: "Operaciones/Finanzas" }, valores: ["Bienestar", "Armonía", "Perseverancia"], v: 6, k: 4, a: 5 },
-            
-            { nombre: "López Palacios Emiliano", quizzes: [5926, 3168, 5970], asistencia: ['A','A','A','A'], carrera: "Administración y Negocios", apodo: "Emiliano", hobbie: "GYM / Soccer", crack: "Soccer", altasPropia: ["Inteligencia emocional", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Directo", "Pragmático", "Balance", "Intuitivo"], bajas: ["Negociación", "Manejo de estrés", "Gestión del cambio"], cv: { exp: "Servicio apoyo documentación SYE Software", skills: "Proactividad, Liderazgo, Trabajo en equipo", rol: "Ventas/Negocios" }, valores: ["Puntualidad", "Justicia", "Respeto"], v: 5, k: 4, a: 6 },
-            
-            { nombre: "López Vázquez Emilio Rogelio", quizzes: [8325, 0, 7793], asistencia: ['A','A','F','A'], carrera: "Administración y RRHH", apodo: "ROGER", hobbie: "Videojuegos", crack: "Atletismo", altasPropia: ["Pensamiento crítico", "Inteligencia emocional", "Liderazgo"], wingfinder: ["Centrado", "Pragmático", "Conservador", "Ágil"], bajas: ["Negociación", "Manejo de estrés", "Comunicación"], cv: { exp: "Feria Costos UP (1er lugar utilidad)", skills: "Liderazgo, Adaptabilidad, Escucha activa", rol: "Recursos Humanos" }, valores: ["Congruencia", "Justicia", "Lealtad"], v: 4, k: 8, a: 3 },
-            
-            { nombre: "Márquez Padilla Alcántara José Andrés", quizzes: [8402, 7634, 8023], asistencia: ['F','A','A','A'], carrera: "Ingeniería Industrial", apodo: "Andrés", hobbie: "Idiomas (Ruso)", crack: "Ajedrez", altasPropia: ["Pensamiento crítico", "Análisis", "Liderazgo"], wingfinder: ["Pensamiento crítico", "Resolución problemas", "Análisis", "Prudencia"], bajas: ["Comunicación", "Delegación", "Trabajo en equipo"], cv: { exp: "Becario área intercambios UP", skills: "Excel MOS Associate, Organización, Atención al detalle", rol: "Tecnología/Datos" }, valores: ["Integridad", "Servicio", "Responsabilidad"], v: 5, k: 5, a: 5 },
-            
-            { nombre: "Montoya Alanis Alan", quizzes: [7551, 7109, 7805], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Alan", hobbie: "GYM Pesas", crack: "Carisma", altasPropia: ["Inteligencia emocional", "Negociación", "Empatía"], wingfinder: ["Reservado", "Pragmático", "Conservador", "Modesto"], bajas: ["Gestión del cambio", "Gestión del tiempo", "Manejo de estrés"], cv: { exp: "Emprendimiento Flower Fashion, Asistente Ventas", skills: "Gestión operativa, Análisis financiero, Atención cliente", rol: "Finanzas/Operaciones" }, valores: ["Liderazgo", "Determinación", "Empatía"], v: 5, k: 4, a: 6 },
-            
-            { nombre: "Mújica García Emilio", quizzes: [8369, 0, 7867], asistencia: ['A','A','F','A'], carrera: "Administración y Finanzas", apodo: "Emilio", hobbie: "Videojuegos", crack: "Sociable", altasPropia: ["Empatía", "Adaptabilidad", "Sociabilidad"], wingfinder: ["Creatividad", "Empatía", "Atento", "Soporte"], bajas: ["Manejo de estrés", "Organización", "Planeación"], cv: { exp: "Proyecto de Inversión Universitaria", skills: "Análisis de Riesgos, Trabajo en Equipo, Finanzas", rol: "Finanzas" }, valores: ["Empatía", "Perdón", "Perseverancia"], v: 4, k: 6, a: 5 },
-            
-            { nombre: "Novelo Salomón Ana Amelie", quizzes: [8111, 0, 0], asistencia: ['A','A','R','F'], carrera: "Administración y Negocios Internacionales", apodo: "Amelie", hobbie: "Cine", crack: "Basket", altasPropia: ["Gestión del cambio", "Liderazgo", "Manejo de estrés"], wingfinder: ["Gestión del cambio", "Liderazgo", "Manejo de estrés", "Determinada"], bajas: ["Autocontrol", "Comunicación", "Delegación"], cv: { exp: "Good Food Logística, Premio Garnier 2024", skills: "Liderazgo, Toma de decisiones, Trabajo en equipo", rol: "Comercio Internacional/Ventas" }, valores: ["Lealtad", "Perseverancia", "Puntualidad"], v: 7, k: 6, a: 2 },
-            
-            { nombre: "Núñez Castañeda Natalia", quizzes: [8375, 7497, 8345], asistencia: ['A','A','A','A'], carrera: "Ingeniería en Mecatrónica", apodo: "Natalia", hobbie: "LEGOS", crack: "Idiomas (Japonés)", altasPropia: ["Liderazgo", "Reuniones efectivas", "Trabajo en equipo"], wingfinder: ["Centrada", "Modesta", "Paciente", "Relajada"], bajas: ["Manejo de estrés", "Negociación", "Delegación"], cv: { exp: "Becaria Relaciones Públicas UP, Líder Robótica", skills: "Liderazgo, Responsabilidad, Proactividad, Robótica", rol: "Tecnología/Datos" }, valores: ["Alegría", "Amistad", "Determinación"], v: 6, k: 6, a: 4 },
-            
-            { nombre: "Perez Varela Ana Cecilia", quizzes: [6527, 6430, 8857], asistencia: ['A','A','A','A'], carrera: "Mercadotecnia", apodo: "AnaCecy", hobbie: "Tés", crack: "Cocina", altasPropia: ["Administración de tiempo", "Inteligencia emocional", "Liderazgo"], wingfinder: ["Diplomática", "Soporte", "Inteligencia emocional", "Paciente"], bajas: ["Negociación", "Manejo de estrés", "Trabajo en equipo"], cv: { exp: "Consejo Merca UP, Promoción y difusión", skills: "Creatividad, Liderazgo, Adaptabilidad", rol: "Mercadotecnia/Ventas" }, valores: ["Empatía", "Respeto", "Puntualidad"], v: 7, k: 6, a: 2 },
-            
-            { nombre: "Said Pérez José Ignacio", quizzes: [0, 0, 7410], asistencia: ['F','F','F','A'], carrera: "Contaduría", apodo: "Ignacio", hobbie: "Ver Deportes", crack: "Beisbol", altasPropia: ["Inteligencia emocional", "Liderazgo", "Gestión del cambio"], wingfinder: ["Inteligencia emocional", "Liderazgo", "Gestión del cambio", "Analítico"], bajas: ["Manejo de estrés", "Comunicación asertiva", "Administración del tiempo"], cv: { exp: "Organización XV Congreso Jóvenes, Sociedad alumnos", skills: "Liderazgo, Trabajo en equipo, Organización", rol: "Impuestos/Auditoría" }, valores: ["Empatía", "Disciplina", "Perseverancia"], v: 6, k: 8, a: 5 },
-            
-            { nombre: "Salas Rubio Ian Trett", quizzes: [8893, 8728, 8683], asistencia: ['A','A','A','A'], carrera: "Administración y Negocios", apodo: "IAN", hobbie: "Videojuegos", crack: "Improvisación", altasPropia: ["Inteligencia emocional", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Inteligencia emocional", "Trabajo equipo", "Pensamiento crítico", "Creativo"], bajas: ["Negociación", "Gestión del cambio", "Liderazgo"], cv: { exp: "Becario académico UP, Servicio social Xochimilco", skills: "Comunicación, Trabajo en equipo, Coordinación", rol: "Consultoría" }, valores: ["Empatía", "Disciplina", "Lealtad"], v: 6, k: 8, a: 5 },
-            
-            { nombre: "Sarabia González Fatima Daniela", quizzes: [8783, 8255, 9864], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Daniela", hobbie: "Música (ADELE)", crack: "Lectura de Emociones", altasPropia: ["Inteligencia emocional", "Administración del tiempo", "Autogestión"], wingfinder: ["Inteligencia emocional", "Gestión tiempo", "Autogestión", "Atenta"], bajas: ["Gestión del cambio", "Negociación", "Delegación"], cv: { exp: "Apoyo administrativo Autopartes SERSA, Becaria IPADE", skills: "Análisis financiero, Gestión tiempo, Atención detalle", rol: "Finanzas" }, valores: ["Alegría", "Lealtad", "Autoestima"], v: 7, k: 2, a: 6 },
-            
-            { nombre: "Torres Landa Lozano Patricio", quizzes: [8378, 0, 8100], asistencia: ['A','A','F','A'], carrera: "Administración y Mercadotecnia", apodo: "Patricio", hobbie: "Tocho", crack: "Videojuegos", altasPropia: ["Liderazgo", "Trabajo en equipo", "Comunicación"], wingfinder: ["Liderazgo", "Trabajo equipo", "Comunicación", "Directo"], bajas: ["Gestión del cambio", "Negociación", "Delegación"], cv: { exp: "Consultor Gestión Talento TRUST PEOPLE", skills: "Excel avanzado, Análisis datos, Liderazgo", rol: "Capital Humano" }, valores: ["Autoestima", "Respeto", "Iniciativa"], v: 3, k: 5, a: 7 },
-            
-            { nombre: "Vazquez Paniagua Macias Juan Manuel", quizzes: [8713, 7874, 9375], asistencia: ['A','A','R','A'], carrera: "Ingeniería en Mecatrónica", apodo: "JUAN", hobbie: "Videojuegos", crack: "Programación", altasPropia: ["Pensamiento Crítico", "Trabajo en equipo", "Inteligencia emocional"], wingfinder: ["Pensamiento Crítico", "Trabajo equipo", "Inteligencia emocional", "Independiente"], bajas: ["Liderazgo", "Manejo de estrés", "Negociación"], cv: { exp: "Grupo ARISE Robótica, Mentor programación C# y Python", skills: "Proactividad, Enfoque colaborativo, Resolución problemas", rol: "Tecnología/Ingeniería" }, valores: ["Determinación", "Congruencia", "Responsabilidad"], v: 4, k: 3, a: 8 },
-            
-            { nombre: "Verdura Basañez Marc", quizzes: [8910, 8896, 7876], asistencia: ['A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Marc", hobbie: "N/D", crack: "Negociación", altasPropia: ["Negociación", "Estrategia", "Liderazgo"], wingfinder: ["Negociación", "Estrategia", "Liderazgo", "Pragmático"], bajas: ["Delegación", "Administración del tiempo", "Manejo de estrés"], cv: { exp: "Concurso Decision Makers UP", skills: "Trabajo en equipo, Organización, Toma decisiones", rol: "Finanzas/Operaciones" }, valores: ["Respeto", "Excelencia", "Disciplina"], v: 5, k: 5, a: 5 }
+            { nombre: "Álvarez Justo Alberto", quizzes: [8034, 0, 0, 0], asistencia: ['A','A','F','F','A'], carrera: "Administración y Finanzas", apodo: "Alberto", hobbie: "Carreras Coches", crack: "Negociar", altasPropia: ["Negociación", "Liderazgo", "Comunicación"], wingfinder: ["Analítico", "Disciplinado", "Liderazgo", "Objetivo"], bajas: ["Gestión del tiempo", "Manejo de estrés", "Delegación"], cv: { exp: "Practicante en Finanzas Corporativas", skills: "Modelado Financiero, Excel Avanzado", rol: "Finanzas/Análisis" }, valores: ["Autocontrol", "Lealtad", "Seguridad"], v: 8, k: 4, a: 3 },
+            { nombre: "Arana López Emilio", quizzes: [5256, 0, 6326, 6218], asistencia: ['F','A','F','A','A'], carrera: "Contaduría", apodo: "Emilio", hobbie: "Padel", crack: "GOLF", altasPropia: ["Liderazgo", "Administración del tiempo", "Organización"], wingfinder: ["Sociable", "Paciente", "Relajado", "Independiente"], bajas: ["Gestión del tiempo", "Comunicación asertiva", "Orden"], cv: { exp: "Becario Contable e IMSS", skills: "Excel avanzado, CONTPAQI", rol: "Auditoría/Impuestos" }, valores: ["Divertirse", "Armonía", "Organización"], v: 3, k: 11, a: 1 },
+            { nombre: "Castro Leo Axel Patricio", quizzes: [8964, 9975, 7997, 8943], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Axel", hobbie: "Series / GYM", crack: "Matemáticas Financieras", altasPropia: ["Liderazgo", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Directo", "Autónomo", "Reservado", "Independiente"], bajas: ["Inteligencia emocional", "Manejo del estrés", "Reuniones"], cv: { exp: "Becario LATINEX, Disney Campus", skills: "Análisis Financiero, Atención cliente", rol: "Finanzas/Operaciones" }, valores: ["Autocontrol", "Respeto", "Perseverancia"], v: 5, k: 4, a: 6 },
+            { nombre: "Cruzado García Emiliano", quizzes: [7995, 7113, 7954, 8149], asistencia: ['A','A','A','A','A'], carrera: "Contaduría", apodo: "Emiliano", hobbie: "Ejercicio Hyrox", crack: "Cacería", altasPropia: ["Manejo de estrés", "Liderazgo", "Trabajo en equipo"], wingfinder: ["Paciente", "Creatividad", "Relajado", "Pragmático"], bajas: ["Reuniones efectivas", "Negociación", "Planeación"], cv: { exp: "Asesoría en Seguridad Social", skills: "Excel, CONTPAQI, SUA", rol: "Contabilidad/Costos" }, valores: ["Divertirse", "Lealtad", "Puntualidad"], v: 6, k: 4, a: 5 },
+            { nombre: "Duarte Villa María José", quizzes: [8363, 9432, 8497, 8170], asistencia: ['A','A','A','A','A'], carrera: "Cyberseguridad", apodo: "MAJO", hobbie: "Cine / Tejer", crack: "Cocinando", altasPropia: ["Liderazgo", "Pensamiento Crítico", "Reuniones efectivas"], wingfinder: ["Modesta", "Autónoma", "Paciente", "Relajada"], bajas: ["Negociación", "Inteligencia emocional", "Gestión del cambio"], cv: { exp: "Tutora Matemáticas, Voluntariado", skills: "Python, Análisis de Datos, R", rol: "Tecnología/Ciberseguridad" }, valores: ["Autocontrol", "Integridad", "Organización"], v: 5, k: 5, a: 5 },
+            { nombre: "Gaytán Ruiz David", quizzes: [8106, 8074, 8703, 8721], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "David", hobbie: "Tenis", crack: "Finanzas", altasPropia: ["Inteligencia emocional", "Negociación", "Liderazgo"], wingfinder: ["Directo", "Autónomo", "Pragmático", "Independiente"], bajas: ["Gestión del cambio", "Administración del tiempo", "Manejo de estrés"], cv: { exp: "Consejo Estudiantil Finanzas", skills: "Proactividad, Resolución problemas", rol: "Banca/Inversiones" }, valores: ["Liderazgo", "Perseverancia", "Integridad"], v: 5, k: 6, a: 4 },
+            { nombre: "Gutiérrez Velázquez Roberto", quizzes: [6652, 4229, 4680, 6323], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Roberto", hobbie: "Tenis", crack: "Golf", altasPropia: ["Liderazgo", "Análisis Financiero", "Negociación"], wingfinder: ["Directo", "Paciente", "Pragmático", "Sociable"], bajas: ["Gestión del cambio", "Comunicación", "Empatía"], cv: { exp: "Administrador Samech, BMV", skills: "Gestión y Análisis Financiero", rol: "Administración/Finanzas" }, valores: ["Lealtad", "Congruencia", "Liderazgo"], v: 5, k: 5, a: 5 },
+            { nombre: "Hernández Rodríguez Luis Felipe", quizzes: [8637, 9102, 10284, 6980], asistencia: ['F','A','A','A','A'], carrera: "Contaduría", apodo: "Felipe", hobbie: "Leer / GYM", crack: "Manejar", altasPropia: ["Disciplina", "Liderazgo", "Organización"], wingfinder: ["Reservado", "Diligente", "Relajado", "Intuitivo"], bajas: ["Negociación", "Inteligencia emocional", "Delegación"], cv: { exp: "Auxiliar Contable Campo Vivo", skills: "CONTPAQI, Office 365", rol: "Contabilidad/Auditoría" }, valores: ["Autocontrol", "Respeto", "Comunicación"], v: 5, k: 1, a: 6 },
+            { nombre: "López Bravo Ana Camila", quizzes: [0, 0, 6409, 6475], asistencia: ['A','A','A','F','A'], carrera: "Administración y Finanzas", apodo: "Camila", hobbie: "GYM Pilates", crack: "Pilates", altasPropia: ["Empatía", "Colaboración", "Escucha activa"], wingfinder: ["Empatía", "Escucha activa", "Colaboración", "Soporte"], bajas: ["Manejo de estrés", "Inteligencia emocional", "Comunicación"], cv: { exp: "Emprendedora E-commerce", skills: "Creatividad, Organización", rol: "Finanzas/Marketing" }, valores: ["Respeto", "Empatía", "Humildad"], v: 6, k: 4, a: 5 },
+            { nombre: "López Iglesias Daniel", quizzes: [8579, 9042, 8022, 6125], asistencia: ['X','A','A','A','X'], carrera: "Administración y Finanzas", apodo: "Daniel", hobbie: "GYM", crack: "Basket", altasPropia: ["Trabajo en equipo", "Liderazgo", "Inteligencia emocional"], wingfinder: ["Paciente", "Autónomo", "Soporte", "Atento"], bajas: ["Manejo del estrés", "Negociación", "Gestión del cambio"], cv: { exp: "Feria Innovación UP, MUN", skills: "Liderazgo, Habilidades comunicativas", rol: "Operaciones/Finanzas" }, valores: ["Bienestar", "Armonía", "Perseverancia"], v: 6, k: 4, a: 5 },
+            { nombre: "López Palacios Emiliano", quizzes: [5926, 3168, 5970, 7911], asistencia: ['A','A','A','F','A'], carrera: "Administración y Negocios", apodo: "Emiliano", hobbie: "GYM / Soccer", crack: "Soccer", altasPropia: ["Inteligencia emocional", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Directo", "Pragmático", "Balance", "Intuitivo"], bajas: ["Negociación", "Manejo de estrés", "Gestión del cambio"], cv: { exp: "Apoyo documentación SYE Software", skills: "Proactividad, Liderazgo", rol: "Ventas/Negocios" }, valores: ["Puntualidad", "Justicia", "Respeto"], v: 5, k: 4, a: 6 },
+            { nombre: "López Vázquez Emilio Rogelio", quizzes: [8325, 0, 7793, 8262], asistencia: ['A','A','F','A','A'], carrera: "Administración y RRHH", apodo: "ROGER", hobbie: "Videojuegos", crack: "Atletismo", altasPropia: ["Pensamiento crítico", "Inteligencia emocional", "Liderazgo"], wingfinder: ["Centrado", "Pragmático", "Conservador", "Ágil"], bajas: ["Negociación", "Manejo de estrés", "Comunicación"], cv: { exp: "Feria Costos UP", skills: "Liderazgo, Adaptabilidad, Escucha", rol: "Recursos Humanos" }, valores: ["Congruencia", "Justicia", "Lealtad"], v: 4, k: 8, a: 3 },
+            { nombre: "Márquez Padilla Alcántara José Andrés", quizzes: [8402, 7634, 8023, 8299], asistencia: ['F','A','A','A','A'], carrera: "Ingeniería Industrial", apodo: "Andrés", hobbie: "Idiomas", crack: "Ajedrez", altasPropia: ["Pensamiento crítico", "Análisis", "Liderazgo"], wingfinder: ["Pensamiento crítico", "Resolución problemas", "Análisis", "Prudencia"], bajas: ["Comunicación", "Delegación", "Trabajo en equipo"], cv: { exp: "Becario Intercambios UP", skills: "Excel MOS, Organización", rol: "Tecnología/Datos" }, valores: ["Integridad", "Servicio", "Responsabilidad"], v: 5, k: 5, a: 5 },
+            { nombre: "Montoya Alanis Alan", quizzes: [7551, 7109, 7805, 8776], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Alan", hobbie: "GYM Pesas", crack: "Carisma", altasPropia: ["Inteligencia emocional", "Negociación", "Empatía"], wingfinder: ["Reservado", "Pragmático", "Conservador", "Modesto"], bajas: ["Gestión del cambio", "Gestión del tiempo", "Manejo de estrés"], cv: { exp: "Flower Fashion, Asistente Ventas", skills: "Gestión operativa, Análisis", rol: "Finanzas/Operaciones" }, valores: ["Liderazgo", "Determinación", "Empatía"], v: 5, k: 4, a: 6 },
+            { nombre: "Mújica García Emilio", quizzes: [8369, 0, 7867, 7704], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Emilio", hobbie: "Videojuegos", crack: "Sociable", altasPropia: ["Empatía", "Adaptabilidad", "Sociabilidad"], wingfinder: ["Creatividad", "Empatía", "Atento", "Soporte"], bajas: ["Manejo de estrés", "Organización", "Planeación"], cv: { exp: "Proyecto de Inversión Univ.", skills: "Finanzas, Análisis de Riesgos", rol: "Finanzas" }, valores: ["Empatía", "Perdón", "Perseverancia"], v: 4, k: 6, a: 5 },
+            { nombre: "Novelo Salomón Ana Amelie", quizzes: [8111, 0, 0, 7203], asistencia: ['A','A','R','F','F'], carrera: "Administración y Negocios Internacionales", apodo: "Amelie", hobbie: "Cine", crack: "Basket", altasPropia: ["Gestión del cambio", "Liderazgo", "Manejo de estrés"], wingfinder: ["Gestión del cambio", "Liderazgo", "Manejo de estrés", "Determinada"], bajas: ["Autocontrol", "Comunicación", "Delegación"], cv: { exp: "Good Food, Premio Garnier 2024", skills: "Liderazgo, Toma de decisiones", rol: "Comercio Int./Ventas" }, valores: ["Lealtad", "Perseverancia", "Puntualidad"], v: 7, k: 6, a: 2 },
+            { nombre: "Núñez Castañeda Natalia", quizzes: [8375, 7497, 8345, 0], asistencia: ['X','A','A','A','A'], carrera: "Ingeniería en Mecatrónica", apodo: "Natalia", hobbie: "LEGOS", crack: "Idiomas (Japonés)", altasPropia: ["Liderazgo", "Reuniones efectivas", "Trabajo en equipo"], wingfinder: ["Centrada", "Modesta", "Paciente", "Relajada"], bajas: ["Manejo de estrés", "Negociación", "Delegación"], cv: { exp: "Relaciones Públicas UP, Robótica", skills: "Liderazgo, Proactividad", rol: "Tecnología/Datos" }, valores: ["Alegría", "Amistad", "Determinación"], v: 6, k: 6, a: 4 },
+            { nombre: "Perez Varela Ana Cecilia", quizzes: [6527, 6430, 8857, 8941], asistencia: ['A','A','A','A','A'], carrera: "Mercadotecnia", apodo: "AnaCecy", hobbie: "Tés", crack: "Cocina", altasPropia: ["Administración de tiempo", "Inteligencia emocional", "Liderazgo"], wingfinder: ["Diplomática", "Soporte", "Inteligencia emocional", "Paciente"], bajas: ["Negociación", "Manejo de estrés", "Trabajo en equipo"], cv: { exp: "Consejo Merca UP", skills: "Creatividad, Adaptabilidad", rol: "Mercadotecnia/Ventas" }, valores: ["Empatía", "Respeto", "Puntualidad"], v: 7, k: 6, a: 2 },
+            { nombre: "Said Pérez José Ignacio", quizzes: [0, 0, 7410, 5883], asistencia: ['A','A','F','A','A'], carrera: "Contaduría", apodo: "Ignacio", hobbie: "Ver Deportes", crack: "Beisbol", altasPropia: ["Inteligencia emocional", "Liderazgo", "Gestión del cambio"], wingfinder: ["Inteligencia emocional", "Liderazgo", "Gestión del cambio", "Analítico"], bajas: ["Manejo de estrés", "Comunicación asertiva", "Administración del tiempo"], cv: { exp: "XV Congreso Jóvenes, Sociedad", skills: "Liderazgo, Organización", rol: "Impuestos/Auditoría" }, valores: ["Empatía", "Disciplina", "Perseverancia"], v: 6, k: 8, a: 5 },
+            { nombre: "Salas Rubio Ian Trett", quizzes: [8893, 8728, 8683, 9566], asistencia: ['A','A','A','A','A'], carrera: "Administración y Negocios", apodo: "IAN", hobbie: "Videojuegos", crack: "Improvisación", altasPropia: ["Inteligencia emocional", "Trabajo en equipo", "Pensamiento crítico"], wingfinder: ["Inteligencia emocional", "Trabajo equipo", "Pensamiento crítico", "Creativo"], bajas: ["Negociación", "Gestión del cambio", "Liderazgo"], cv: { exp: "Becario UP, Servicio Social", skills: "Comunicación, Coordinación", rol: "Consultoría" }, valores: ["Empatía", "Disciplina", "Lealtad"], v: 6, k: 8, a: 5 },
+            { nombre: "Sarabia González Fatima Daniela", quizzes: [8783, 8255, 9864, 6298], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Daniela", hobbie: "Música (ADELE)", crack: "Lectura de Emociones", altasPropia: ["Inteligencia emocional", "Administración del tiempo", "Autogestión"], wingfinder: ["Inteligencia emocional", "Gestión tiempo", "Autogestión", "Atenta"], bajas: ["Gestión del cambio", "Negociación", "Delegación"], cv: { exp: "Becaria IPADE", skills: "Análisis financiero, Atención detalle", rol: "Finanzas" }, valores: ["Alegría", "Lealtad", "Autoestima"], v: 7, k: 2, a: 6 },
+            { nombre: "Torres Landa Lozano Patricio", quizzes: [8378, 0, 8100, 0], asistencia: ['A','A','A','A','A'], carrera: "Administración y Mercadotecnia", apodo: "Patricio", hobbie: "Tocho", crack: "Videojuegos", altasPropia: ["Liderazgo", "Trabajo en equipo", "Comunicación"], wingfinder: ["Liderazgo", "Trabajo equipo", "Comunicación", "Directo"], bajas: ["Gestión del cambio", "Negociación", "Delegación"], cv: { exp: "Consultor TRUST PEOPLE", skills: "Excel, Análisis datos", rol: "Capital Humano" }, valores: ["Autoestima", "Respeto", "Iniciativa"], v: 3, k: 5, a: 7 },
+            { nombre: "Vazquez Paniagua Macias Juan Manuel", quizzes: [8713, 7874, 9375, 8453], asistencia: ['A','A','R','A','A'], carrera: "Ingeniería en Mecatrónica", apodo: "JUAN", hobbie: "Videojuegos", crack: "Programación", altasPropia: ["Pensamiento Crítico", "Trabajo en equipo", "Inteligencia emocional"], wingfinder: ["Pensamiento Crítico", "Trabajo equipo", "Inteligencia emocional", "Independiente"], bajas: ["Liderazgo", "Manejo de estrés", "Negociación"], cv: { exp: "Arise Robótica, Mentor C#", skills: "Resolución problemas, Colaboración", rol: "Tecnología/Ingeniería" }, valores: ["Determinación", "Congruencia", "Responsabilidad"], v: 4, k: 3, a: 8 },
+            { nombre: "Verdura Basañez Marc", quizzes: [8910, 8896, 7876, 8815], asistencia: ['A','A','A','A','A'], carrera: "Administración y Finanzas", apodo: "Marc", crack: "Negociación", altasPropia: ["Negociación", "Estrategia", "Liderazgo"], wingfinder: ["Negociación", "Estrategia", "Liderazgo", "Pragmático"], bajas: ["Delegación", "Administración del tiempo", "Manejo de estrés"], cv: { exp: "Decision Makers UP", skills: "Toma de decisiones, Organización", rol: "Finanzas/Operaciones" }, valores: ["Respeto", "Excelencia", "Disciplina"], v: 5, k: 5, a: 5 }
         ];
 
         const UP_BLUE = '#004b8d', UP_RED = '#ce1126', UP_GOLD = '#a68a56';
@@ -97,12 +76,12 @@
 
             const stats = useMemo(() => {
                 const counts = { altas: {}, bajas: {}, canales: { Visual: 0, Kinestésico: 0, Auditivo: 0 } };
-                let sums = [0, 0, 0], countsParticip = [0, 0, 0];
+                let sums = [0, 0, 0, 0], particip = [0, 0, 0, 0];
                 
                 rawData.forEach(s => {
                     s.altasPropia?.slice(0,3).forEach(c => counts.altas[c] = (counts.altas[c] || 0) + 1);
                     s.bajas?.slice(0,3).forEach(c => counts.bajas[c] = (counts.bajas[c] || 0) + 1);
-                    s.quizzes.forEach((val, i) => { if (val > 0) { sums[i] += val; countsParticip[i]++; } });
+                    s.quizzes.forEach((val, i) => { if (val > 0) { sums[i] += val; particip[i]++; } });
                     const maxS = Math.max(s.v || 0, s.k || 0, s.a || 0);
                     if (maxS > 0) {
                         if (s.v === maxS) counts.canales.Visual++;
@@ -116,34 +95,35 @@
                     topBajas: Object.entries(counts.bajas).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 3),
                     canalesData: Object.entries(counts.canales).map(([name, value]) => ({ name, value })),
                     quizHistory: [
-                        { name: 'S1', score: countsParticip[0] > 0 ? Math.round(sums[0]/countsParticip[0]) : 0 },
-                        { name: 'S2', score: countsParticip[1] > 0 ? Math.round(sums[1]/countsParticip[1]) : 0 },
-                        { name: 'S3', score: countsParticip[2] > 0 ? Math.round(sums[2]/countsParticip[2]) : 0 }
+                        { name: 'S1', score: particip[0] > 0 ? Math.round(sums[0]/particip[0]) : 0 },
+                        { name: 'S2', score: particip[1] > 0 ? Math.round(sums[1]/particip[1]) : 0 },
+                        { name: 'S3', score: particip[2] > 0 ? Math.round(sums[2]/particip[2]) : 0 },
+                        { name: 'S4', score: particip[3] > 0 ? Math.round(sums[3]/particip[3]) : 0 }
                     ],
                     quizRanking: [...rawData].map(s => ({ name: s.apodo, score: s.quizzes.reduce((a,b)=>a+b,0) })).sort((a, b) => b.score - a.score).slice(0, 10)
                 };
             }, []);
 
-            const filteredStudents = rawData.filter(s => s.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || s.apodo.toLowerCase().includes(searchTerm.toLowerCase()));
+            const filteredStudents = rawData.sort((a,b)=>a.nombre.localeCompare(b.nombre)).filter(s => s.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || s.apodo.toLowerCase().includes(searchTerm.toLowerCase()));
 
             const renderResumen = () => (
                 <div className="space-y-6 animate-fade pb-10">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="bg-white p-5 border-b-4 border-up-blue shadow-sm text-center">
-                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Inscritos</p>
-                            <p className="text-2xl font-black text-gray-800">{rawData.length}</p>
+                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Participantes S4</p>
+                            <p className="text-2xl font-black text-gray-800">{rawData.filter(s=>s.quizzes[3]>0).length}</p>
                         </div>
                         <div className="bg-white p-5 border-b-4 border-up-red shadow-sm text-center">
-                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Promedio Real S3</p>
-                            <p className="text-2xl font-black text-gray-800">{stats.quizHistory[2].score}</p>
+                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Media Real S4</p>
+                            <p className="text-2xl font-black text-gray-800">{stats.quizHistory[3].score}</p>
                         </div>
                         <div className="bg-white p-5 border-b-4 border-up-gold shadow-sm text-center">
-                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Ranking Top</p>
+                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Ranking #1</p>
                             <p className="text-lg font-black truncate">{stats.quizRanking[0].name}</p>
                         </div>
                         <div className="bg-white p-5 border-b-4 border-up-blue shadow-sm text-center">
-                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Fortaleza Gral.</p>
-                            <p className="text-lg font-black truncate">{stats.topAltas[0]?.name}</p>
+                            <p className="text-gray-400 text-[10px] font-black uppercase mb-1">Grupo Total</p>
+                            <p className="text-2xl font-black text-gray-800">{rawData.length}</p>
                         </div>
                     </div>
                     
@@ -162,7 +142,7 @@
                             </div>
                         </div>
                         <div className="bg-white p-6 shadow-sm border rounded-lg">
-                            <h3 className="text-xs font-black uppercase mb-6 text-up-blue flex items-center gap-2"><Icon name="trending-up" size={14} className="text-up-red"/> Tendencia Académica Reales</h3>
+                            <h3 className="text-xs font-black uppercase mb-6 text-up-blue flex items-center gap-2"><Icon name="trending-up" size={14} className="text-up-red"/> Evolución Académica Promedio</h3>
                             <div className="h-64">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={stats.quizHistory}>
@@ -176,21 +156,20 @@
                         </div>
                     </div>
 
-                    {/* TABLA TOP 10 RANKING */}
                     <div className="bg-white p-6 shadow-sm border rounded-lg">
-                        <h3 className="text-xs font-black uppercase mb-4 text-up-blue flex items-center gap-2"><Icon name="trophy" size={14} className="text-up-gold"/> Top 10 Ranking Acumulado</h3>
+                        <h3 className="text-xs font-black uppercase mb-4 text-up-blue flex items-center gap-2"><Icon name="trophy" size={14} className="text-up-gold"/> Top 10 Ranking Acumulado (4 Quizzes)</h3>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-4 py-2 text-left font-black text-[10px] uppercase text-gray-500">Posición</th>
+                                        <th className="px-4 py-2 text-left font-black text-[10px] uppercase text-gray-500">Pos</th>
                                         <th className="px-4 py-2 text-left font-black text-[10px] uppercase text-gray-500">Alumno</th>
                                         <th className="px-4 py-2 text-right font-black text-[10px] uppercase text-gray-500">Score Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {stats.quizRanking.map((student, idx) => (
-                                        <tr key={idx} className={`border-b ${idx === 0 ? 'bg-yellow-50' : idx === 1 ? 'bg-gray-50' : idx === 2 ? 'bg-orange-50' : ''}`}>
+                                        <tr key={idx} className="border-b">
                                             <td className="px-4 py-3 font-bold text-gray-700">{idx + 1}</td>
                                             <td className="px-4 py-3 font-bold text-up-blue">{student.name}</td>
                                             <td className="px-4 py-3 text-right font-black text-up-red">{student.score.toLocaleString()}</td>
@@ -207,9 +186,9 @@
                 <div className="space-y-4 animate-fade pb-10">
                     <div className="bg-white p-3 shadow-sm rounded-lg border flex items-center gap-3">
                         <Icon name="search" size={18} className="text-gray-400" />
-                        <input type="text" placeholder="Buscar por apellido o apodo..." className="w-full outline-none text-sm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+                        <input type="text" placeholder="Buscar por apellido..." className="w-full outline-none text-sm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pb-10">
                         {filteredStudents.map((s, idx) => (
                             <div key={idx} onClick={() => { setSelectedStudent(s); setActiveTab('individual'); }} className="bg-white p-4 border rounded-lg shadow-sm flex justify-between items-center cursor-pointer hover:border-up-blue transition-all group active:scale-95">
                                 <div className="overflow-hidden">
@@ -224,7 +203,7 @@
             );
 
             const renderPerfil = () => {
-                if (!selectedStudent) return <div className="text-center py-20 animate-fade text-gray-400 uppercase text-[10px] font-black tracking-widest">Selecciona un perfil en la pestaña Alumnos</div>;
+                if (!selectedStudent) return <div className="text-center py-20 animate-fade text-gray-400 uppercase text-[10px] font-black tracking-widest">Selecciona un alumno en Alumnos</div>;
                 
                 const totalScore = selectedStudent.quizzes.reduce((a,b)=>a+b,0);
                 const maxS = Math.max(selectedStudent.v || 0, selectedStudent.k || 0, selectedStudent.a || 0);
@@ -233,7 +212,7 @@
 
                 return (
                     <div className="space-y-6 pb-20 animate-fade">
-                        {/* Cabecera Identidad */}
+                        {/* Identidad */}
                         <div className="bg-white p-8 border shadow-sm border-t-8 border-up-blue rounded-b-lg text-center">
                             <div className="w-24 h-24 up-blue text-white flex items-center justify-center text-4xl font-black mb-4 mx-auto shadow-xl">{selectedStudent.nombre[0]}</div>
                             <h2 className="text-4xl font-black text-gray-800 uppercase tracking-tighter leading-tight">{selectedStudent.nombre}</h2>
@@ -249,20 +228,20 @@
                         <div className="bg-white p-6 border shadow-sm rounded-lg border-l-8 border-up-blue">
                             <h3 className="text-[11px] font-black uppercase text-up-blue mb-5 flex items-center gap-2 border-b pb-2"><Icon name="briefcase" size={16} /> Perfil Profesional (CV)</h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div><p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Experiencia Clave</p><p className="text-xs font-bold text-gray-700 leading-relaxed">{selectedStudent.cv.exp}</p></div>
+                                <div><p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Experiencia</p><p className="text-xs font-bold text-gray-700 leading-relaxed">{selectedStudent.cv.exp}</p></div>
                                 <div><p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Hard Skills</p><p className="text-xs font-bold text-gray-700 leading-relaxed">{selectedStudent.cv.skills}</p></div>
                                 <div><p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Rol Sugerido</p><span className="bg-blue-50 text-up-blue px-2 py-1 rounded-sm text-[10px] font-black uppercase">{selectedStudent.cv.rol}</span></div>
                             </div>
                         </div>
 
-                        {/* SCORES MENTI DETALLADOS */}
+                        {/* Scores Menti Detallados */}
                         <div className="bg-white p-5 border shadow-sm rounded-lg border-l-8 border-up-gold">
                             <h3 className="text-[11px] font-black uppercase text-up-gold mb-4 border-b pb-1 flex items-center gap-2"><Icon name="bar-chart-2" size={16}/> Desempeño Semanal Menti</h3>
-                            <div className="grid grid-cols-3 gap-4 text-center">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                                 {selectedStudent.quizzes.map((score, i) => (
                                     <div key={i} className="bg-gray-50 p-4 rounded-lg border-b-4 border-up-blue">
-                                        <p className="text-[8px] font-black text-gray-400 uppercase mb-1">Sesión {i+1}</p>
-                                        <p className="text-2xl font-black text-gray-800">{score > 0 ? score.toLocaleString() : '—'}</p>
+                                        <p className="text-[8px] font-black text-gray-400 uppercase mb-1">Quiz {i+1}</p>
+                                        <p className="text-xl font-black text-gray-800">{score > 0 ? score.toLocaleString() : '—'}</p>
                                     </div>
                                 ))}
                             </div>
@@ -270,12 +249,12 @@
 
                         {/* Asistencia Semanal */}
                         <div className="bg-white p-5 border shadow-sm rounded-lg border-l-8 border-up-red">
-                            <h3 className="text-[11px] font-black uppercase text-up-red mb-4 border-b pb-1">Seguimiento de Asistencia (S1-S4)</h3>
-                            <div className="flex justify-between md:justify-around text-center">
+                            <h3 className="text-[11px] font-black uppercase text-up-red mb-4 border-b pb-1">Asistencia Acumulada (S1-S5)</h3>
+                            <div className="flex justify-between md:justify-around text-center overflow-x-auto pb-2">
                                 {selectedStudent.asistencia.map((status, i) => (
-                                    <div key={i}>
-                                        <p className="text-[8px] font-black text-gray-400 uppercase">Sem 0{i+1}</p>
-                                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shadow-sm ${status==='A'?'bg-green-100 text-green-700':status==='F'?'bg-red-100 text-red-700':'bg-yellow-100 text-yellow-700'}`}>{status}</div>
+                                    <div key={i} className="min-w-[50px]">
+                                        <p className="text-[8px] font-black text-gray-400 uppercase">S{i+1}</p>
+                                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shadow-sm mx-auto ${status==='A'?'bg-green-100 text-green-700':status==='F'?'bg-red-100 text-red-700':'bg-yellow-100 text-yellow-700'}`}>{status}</div>
                                     </div>
                                 ))}
                             </div>
@@ -286,7 +265,7 @@
                             <div className="bg-white p-6 border shadow-sm rounded-lg border-up-gold border-l-8">
                                 <h3 className="text-[11px] font-black uppercase text-up-gold mb-3 border-b pb-2"><Icon name="star" size={16} /> Identidad Académica</h3>
                                 <div className="space-y-3 text-xs">
-                                    <p><span className="font-black text-up-blue uppercase block mb-1">Pasatiempo favorito:</span> {selectedStudent.hobbie}</p>
+                                    <p><span className="font-black text-up-blue uppercase block mb-1">Pasatiempo:</span> {selectedStudent.hobbie}</p>
                                     <p><span className="font-black text-up-red uppercase block mb-1">Es un crack para:</span> {selectedStudent.crack}</p>
                                 </div>
                             </div>
@@ -301,7 +280,7 @@
                         {/* CONTRASTE DIAGNÓSTICO */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="bg-white p-6 border shadow-sm border-l-4 border-green-600 rounded-lg">
-                                <h3 className="text-[11px] font-black uppercase text-green-700 mb-4 tracking-[2px] flex items-center gap-2"><Icon name="user-check" size={16} /> Percepción Propia (Top 3)</h3>
+                                <h3 className="text-[11px] font-black uppercase text-green-700 mb-4 tracking-[2px] flex items-center gap-2"><Icon name="user-check" size={16} /> Percepción Propia</h3>
                                 <div className="space-y-2">{selectedStudent.altasPropia.slice(0,3).map((c, i) => <div key={i} className="bg-green-50 p-3 border-l-4 border-green-600 font-black text-xs uppercase text-gray-800">{c}</div>)}</div>
                             </div>
                             <div className="bg-white p-6 border shadow-sm border-l-4 border-up-gold rounded-lg">
@@ -310,15 +289,13 @@
                             </div>
                         </div>
 
-                        {/* DEBILIDADES */}
                         <div className="bg-white p-6 border shadow-sm border-l-4 border-up-red rounded-lg">
                             <h3 className="text-[11px] font-black uppercase text-up-red mb-4 tracking-[2px] flex items-center gap-2"><Icon name="target" size={16} /> Áreas de Oportunidad (3)</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                {selectedStudent.bajas.slice(0,3).map((c, i) => <div key={i} className="bg-red-50 p-3 border-l-4 border-up-red font-black text-xs uppercase text-gray-800 truncate text-center flex items-center justify-center min-h-[40px] leading-tight">{c}</div>)}
+                                {selectedStudent.bajas.slice(0,3).map((c, i) => <div key={i} className="bg-red-50 p-3 border-l-4 border-up-red font-black text-xs uppercase text-gray-800 truncate text-center flex items-center justify-center leading-tight min-h-[40px]">{c}</div>)}
                             </div>
                         </div>
 
-                        {/* Estrategia Final */}
                         <div className="bg-gray-900 text-white p-10 border-t-8 border-up-red shadow-2xl rounded-lg">
                             <h3 className="text-xl font-black uppercase tracking-tighter mb-4 text-up-gold flex items-center gap-3"><Icon name="zap" size={20} className="text-up-gold" /> Estrategia Docente Táctica</h3>
                             <p className="text-base font-light leading-relaxed">
@@ -334,7 +311,7 @@
                     <header className="bg-white border-b-2 border-up-blue sticky top-0 z-50 p-4 shadow-md flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 up-blue text-white flex items-center justify-center font-black text-lg shadow rounded-sm shrink-0">UP</div>
-                            <div className="hidden sm:block text-[10px] font-black text-up-blue uppercase tracking-tight leading-none text-left">Competencias Directivas<br/><span className="text-up-red text-[8px]">v10.0 AUDITADO 10-FEB-26</span></div>
+                            <div className="hidden sm:block text-[10px] font-black text-up-blue uppercase tracking-tight leading-none text-left">Competencias Directivas<br/><span className="text-up-red text-[8px]">v11.0 AUDITADO 17-FEB-26</span></div>
                         </div>
                         <div className="flex bg-gray-100 p-1 rounded-lg">
                             <button onClick={() => setActiveTab('resumen')} className={`px-4 py-2 rounded-md transition-all flex items-center gap-2 ${activeTab === 'resumen' ? 'bg-white text-up-blue shadow-md' : 'text-gray-400'}`}><Icon name="bar-chart-3" /></button>
