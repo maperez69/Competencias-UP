@@ -212,23 +212,24 @@
                         <input type="text" placeholder="Buscar por apellido..." className="w-full outline-none text-sm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pb-10">
-                        {filteredStudents.map((s, idx) => (
-                            <div key={idx} onClick={() => { setSelectedStudent(s); setActiveTab('individual'); }} className="bg-white p-4 border rounded-lg shadow-sm flex justify-between items-center cursor-pointer hover:border-up-blue transition-all group active:scale-95">
-                                <div className="flex items-center gap-3 overflow-hidden flex-1">
-                                    {s.ranking && (
-                                        <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${s.ranking <= 3 ? 'bg-up-gold text-white' : s.ranking <= 10 ? 'bg-up-blue text-white' : 'bg-gray-200 text-gray-600'}`}>
+                        {filteredStudents.map((s, idx) => {
+                            const rankColor = s.ranking <= 3 ? UP_GOLD : s.ranking <= 10 ? UP_BLUE : '#6b7280';
+                            return (
+                                <div key={idx} onClick={() => { setSelectedStudent(s); setActiveTab('individual'); }} className="bg-white p-4 border rounded-lg shadow-sm flex justify-between items-center cursor-pointer hover:border-up-blue transition-all group active:scale-95">
+                                    <div className="flex items-center gap-3 overflow-hidden flex-1">
+                                        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm text-white" style={{backgroundColor: rankColor}}>
                                             #{s.ranking}
                                         </div>
-                                    )}
-                                    <div className="overflow-hidden">
-                                        <p className="font-bold text-sm text-gray-800 uppercase truncate">{s.nombre}</p>
-                                        <p className="text-[10px] text-up-red font-black uppercase italic">"{s.apodo}" • Score: {s.quizzes.reduce((a,b)=>a+b,0)}</p>
-                                        {s.perfil?.dom && <p className="text-[9px] text-up-gold font-bold">{s.perfil.dom}</p>}
+                                        <div className="overflow-hidden">
+                                            <p className="font-bold text-sm text-gray-800 uppercase truncate">{s.nombre}</p>
+                                            <p className="text-[10px] text-up-red font-black uppercase italic">"{s.apodo}" • Score: {s.quizzes.reduce((a,b)=>a+b,0)}</p>
+                                            {s.perfil?.dom && <p className="text-[9px] text-up-gold font-bold">{s.perfil.dom}</p>}
+                                        </div>
                                     </div>
+                                    <Icon name="chevron-right" size={18} className="text-gray-300 group-hover:text-up-blue shrink-0" />
                                 </div>
-                                <Icon name="chevron-right" size={18} className="text-gray-300 group-hover:text-up-blue shrink-0" />
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             );
@@ -240,18 +241,17 @@
                 const maxS = Math.max(selectedStudent.v || 0, selectedStudent.k || 0, selectedStudent.a || 0);
                 const canalD = selectedStudent.v === maxS ? 'Visual' : (selectedStudent.k === maxS ? 'Kinestésico' : 'Auditivo');
                 const canalColor = canalD === 'Visual' ? 'bg-[#004b8d]' : (canalD === 'Kinestésico' ? 'bg-[#ce1126]' : 'bg-[#a68a56]');
+                const rankColor = selectedStudent.ranking <= 3 ? UP_GOLD : selectedStudent.ranking <= 10 ? UP_BLUE : '#6b7280';
 
                 return (
                     <div className="space-y-6 pb-20 animate-fade">
                         <div className="bg-white p-8 border shadow-sm border-t-8 border-up-blue rounded-b-lg text-center">
                             <div className="flex justify-center items-center gap-4 mb-4">
                                 <div className="w-24 h-24 up-blue text-white flex items-center justify-center text-4xl font-black shadow-xl">{selectedStudent.nombre[0]}</div>
-                                {selectedStudent.ranking && (
-                                    <div className={`flex flex-col items-center justify-center w-20 h-20 rounded-full shadow-xl ${selectedStudent.ranking <= 3 ? 'bg-up-gold' : selectedStudent.ranking <= 10 ? 'bg-up-blue' : 'bg-gray-400'} text-white`}>
-                                        <div className="text-[10px] font-black uppercase">Lugar</div>
-                                        <div className="text-3xl font-black">#{selectedStudent.ranking}</div>
-                                    </div>
-                                )}
+                                <div className="flex flex-col items-center justify-center w-20 h-20 rounded-full shadow-xl text-white" style={{backgroundColor: rankColor}}>
+                                    <div className="text-[10px] font-black uppercase">Lugar</div>
+                                    <div className="text-3xl font-black">#{selectedStudent.ranking}</div>
+                                </div>
                             </div>
                             <h2 className="text-4xl font-black text-gray-800 uppercase tracking-tighter leading-tight">{selectedStudent.nombre}</h2>
                             <p className="text-up-red font-bold text-2xl mt-1 italic">"{selectedStudent.apodo}"</p>
